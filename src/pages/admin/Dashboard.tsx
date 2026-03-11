@@ -1,6 +1,6 @@
 import { format } from 'date-fns'
 import { Link } from 'react-router-dom'
-import { Users, Clock, FileCheck, AlertCircle } from 'lucide-react'
+import { Users, Clock, FileCheck, AlertCircle, ChevronRight } from 'lucide-react'
 import { mockAttendanceRecords } from '@/data/mock'
 
 export default function AdminDashboard() {
@@ -44,41 +44,45 @@ export default function AdminDashboard() {
   ]
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8 overflow-x-hidden">
       <div>
-        <h1 className="text-2xl font-semibold text-surface-900">Dashboard</h1>
-        <p className="text-surface-500 mt-1">Overview of attendance and payroll.</p>
+        <h1 className="text-xl sm:text-2xl font-semibold text-surface-900 tracking-tight">Dashboard</h1>
+        <p className="text-surface-500 mt-1 text-xs sm:text-sm">Overview of attendance and payroll.</p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {stats.map(({ label, value, sub, icon: Icon, color }) => (
-          <div key={label} className="card p-5">
-            <div className="flex items-start justify-between">
-              <div>
-                <p className="text-sm text-surface-500">{label}</p>
-                <p className="text-2xl font-semibold text-surface-900 mt-1">{value}</p>
-                <p className="text-xs text-surface-400 mt-0.5">{sub}</p>
+          <div
+            key={label}
+            className="rounded-lg sm:rounded-xl border border-surface-200/80 bg-white p-3 sm:p-5 shadow-sm hover:shadow-md transition-shadow min-w-0"
+          >
+            <div className="flex items-start justify-between gap-2">
+              <div className="min-w-0">
+                <p className="text-[10px] sm:text-xs font-medium text-surface-500 uppercase tracking-wider truncate">{label}</p>
+                <p className="text-lg sm:text-2xl font-semibold text-surface-900 mt-0.5 sm:mt-1 tabular-nums truncate">{value}</p>
+                <p className="text-[10px] sm:text-xs text-surface-400 mt-0.5 truncate">{sub}</p>
               </div>
-              <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${color}`}>
-                <Icon className="w-5 h-5" />
+              <div className={`w-9 h-9 sm:w-11 sm:h-11 rounded-lg sm:rounded-xl flex items-center justify-center shrink-0 ${color}`}>
+                <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
             </div>
           </div>
         ))}
       </div>
 
-      <div className="grid lg:grid-cols-2 gap-6">
-        <div className="card p-6">
-          <h2 className="text-lg font-medium text-surface-900 mb-4">Recent attendance</h2>
-          <div className="space-y-3">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+        <div className="rounded-xl sm:rounded-2xl border border-surface-200/80 bg-white p-4 sm:p-6 shadow-sm min-w-0">
+          <h2 className="text-sm sm:text-base font-semibold text-surface-900 mb-0.5 sm:mb-1">Recent attendance</h2>
+          <p className="text-xs sm:text-sm text-surface-500 mb-4 sm:mb-5">Latest clock-in activity</p>
+          <div className="space-y-0">
             {mockAttendanceRecords.slice(0, 5).map((r) => (
               <div
                 key={r.id}
-                className="flex items-center justify-between py-2 border-b border-surface-100 last:border-0"
+                className="flex items-center justify-between gap-2 py-3 sm:py-3.5 border-b border-surface-100 last:border-0 hover:bg-surface-50/50 transition-colors rounded-lg px-2 -mx-2 min-w-0"
               >
-                <div>
-                  <p className="text-sm font-medium text-surface-900">{r.employeeName}</p>
-                  <p className="text-xs text-surface-500">
+                <div className="min-w-0">
+                  <p className="text-xs sm:text-sm font-medium text-surface-900 truncate">{r.employeeName}</p>
+                  <p className="text-[10px] sm:text-xs text-surface-500 mt-0.5 truncate">
                     {format(new Date(r.date), 'MMM d')} · {r.clockIn ? format(new Date(r.clockIn), 'HH:mm') : '—'} –{' '}
                     {r.clockOut ? format(new Date(r.clockOut), 'HH:mm') : '—'}
                   </p>
@@ -86,10 +90,10 @@ export default function AdminDashboard() {
                 <span
                   className={
                     r.status === 'present' || r.status === 'adjusted'
-                      ? 'text-xs font-medium text-brand-600'
+                      ? 'inline-flex items-center px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-medium bg-brand-100 text-brand-700 shrink-0'
                       : r.status === 'absent'
-                        ? 'text-xs font-medium text-amber-600'
-                        : 'text-xs font-medium text-surface-500'
+                        ? 'inline-flex items-center px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-medium bg-amber-100 text-amber-700 shrink-0'
+                        : 'inline-flex items-center px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-medium bg-surface-100 text-surface-600 shrink-0'
                   }
                 >
                   {r.status}
@@ -98,26 +102,30 @@ export default function AdminDashboard() {
             ))}
           </div>
         </div>
-        <div className="card p-6">
-          <h2 className="text-lg font-medium text-surface-900 mb-4">Quick actions</h2>
+        <div className="rounded-xl sm:rounded-2xl border border-surface-200/80 bg-white p-4 sm:p-6 shadow-sm min-w-0">
+          <h2 className="text-sm sm:text-base font-semibold text-surface-900 mb-0.5 sm:mb-1">Quick actions</h2>
+          <p className="text-xs sm:text-sm text-surface-500 mb-4 sm:mb-5">Common tasks</p>
           <div className="space-y-2">
             <Link
               to="/admin/attendance"
-              className="block rounded-lg border border-surface-200 px-4 py-3 text-sm font-medium text-surface-700 hover:bg-surface-50 transition-colors"
+              className="flex items-center justify-between gap-2 rounded-xl border border-surface-200/80 px-3 py-3 sm:px-4 sm:py-3.5 text-sm font-medium text-surface-700 hover:bg-surface-50 hover:border-surface-300 transition-colors group"
             >
-              Review attendance records
+              <span className="truncate">Review attendance records</span>
+              <ChevronRight className="w-4 h-4 text-surface-400 group-hover:text-surface-600 shrink-0" />
             </Link>
             <Link
               to="/admin/payroll"
-              className="block rounded-lg border border-surface-200 px-4 py-3 text-sm font-medium text-surface-700 hover:bg-surface-50 transition-colors"
+              className="flex items-center justify-between gap-2 rounded-xl border border-surface-200/80 px-3 py-3 sm:px-4 sm:py-3.5 text-sm font-medium text-surface-700 hover:bg-surface-50 hover:border-surface-300 transition-colors group"
             >
-              Run payroll calculation
+              <span className="truncate">Run payroll calculation</span>
+              <ChevronRight className="w-4 h-4 text-surface-400 group-hover:text-surface-600 shrink-0" />
             </Link>
             <Link
               to="/admin/reports"
-              className="block rounded-lg border border-surface-200 px-4 py-3 text-sm font-medium text-surface-700 hover:bg-surface-50 transition-colors"
+              className="flex items-center justify-between gap-2 rounded-xl border border-surface-200/80 px-3 py-3 sm:px-4 sm:py-3.5 text-sm font-medium text-surface-700 hover:bg-surface-50 hover:border-surface-300 transition-colors group"
             >
-              Export payroll report
+              <span className="truncate">Export payroll report</span>
+              <ChevronRight className="w-4 h-4 text-surface-400 group-hover:text-surface-600 shrink-0" />
             </Link>
           </div>
         </div>
